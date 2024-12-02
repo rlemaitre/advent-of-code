@@ -1,13 +1,19 @@
-object day01:
-    given parser: Parser[(Long, Long)] = parsers.separatedPairBy("\\s+")(_.toLong)
+package aoc2024
 
-    @main
+import aoc2024.Day02.Report
+import helpers.{*, given}
+
+object Day01 extends AoCDay:
+    type Input = (Long, Long)
+    type Output = Long
+    given parser: Parser[Input] = parsers.separatedPairBy("\\s+")(_.toLong)
+
     def main(): Unit =
         val input = (os.pwd / "files" / "day01.txt").parsed
         display("Day 1", part1(input), part2(input))
     end main
 
-    def part1(input: List[(Long, Long)]): Long =
+    def part1(input: List[Input]): Output =
         val (first, second) = input.unzip
         first
             .sorted
@@ -17,7 +23,7 @@ object day01:
             .sum
     end part1
 
-    def part2(input: List[(Long, Long)]): Long =
+    def part2(input: List[Input]): Output =
         val (first, second) = input.unzip
         first
             .map: a =>
@@ -25,4 +31,4 @@ object day01:
             .sum
     end part2
 
-end day01
+end Day01

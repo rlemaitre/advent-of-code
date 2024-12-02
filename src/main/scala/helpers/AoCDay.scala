@@ -1,3 +1,5 @@
+package helpers
+
 trait AoCDay:
     type Input
     type Output

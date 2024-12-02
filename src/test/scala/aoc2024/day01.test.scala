@@ -1,3 +1,8 @@
+package aoc2024
+
+import Day01.{part1, part2}
+import helpers.{*, given}
+
 class Day01Test extends munit.FunSuite:
     val testInput: String =
         """
@@ -8,8 +13,7 @@ class Day01Test extends munit.FunSuite:
           |3   9
           |3   3
           |""".stripMargin
-    import day01.*
-    import day01.given
+    import Day01.{*, given}
 
     test("part 1"):
         assertEquals(part1(testInput.parsed), 11L)

@@ -1,7 +1,12 @@
+package aoc
+
 import java.time.LocalDate
 import scala.io.StdIn
 import sttp.client4.Response
 import sttp.client4.quick.*
+import helpers.*
+import helpers.given
+
 
 object initDay:
     @main
@@ -16,7 +21,7 @@ object initDay:
         val inputPath  = os.pwd / "files" / s"day${day.show}.txt"
         if !os.exists(inputPath) then
             val response = quickRequest
-                .get(uri"https://adventofcode.com/$year/day/${day.show}/input")
+                .get(uri"https://adventofcode.com/$year/day/$day/input")
                 .header("Cookie", s"session=$token")
                 .send()
             os.write(inputPath, response.body)

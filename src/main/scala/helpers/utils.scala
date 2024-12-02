@@ -1,3 +1,5 @@
+package helpers
+
 import os.Path
 import scala.annotation.targetName
 
