@@ -20,8 +20,8 @@ given Parser[Long]                             = _.toLong
 given [T](using p: Parser[T]): Parser[List[T]] = _.split('\n').filter(_.nonEmpty).toList.map(parse).toList
 
 object parsers:
-    def separatedBy(separator: String): Parser[List[String]] = input =>
-        input.split(separator).toList
+    def separatedBy[T](separator: String)(f: String => T): Parser[List[T]] = input =>
+        input.split(separator).toList.map(f)
 
     def separatedPairBy[T](separator: String)(f: String => T): Parser[(T, T)] = input =>
         val Array(a, b) = input.split(separator)
