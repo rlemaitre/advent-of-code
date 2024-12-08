@@ -3,22 +3,21 @@ package helpers
 import os.Path
 import scala.annotation.targetName
 
-type Parser[T] = String => T
+type Parser[T]     = String => T
+type ListParser[T] = Parser[List[T]]
 
-def parse[T](input: String)(using p: Parser[T]): List[T] =
-    input.split("\n").filter(_.nonEmpty).toList.map(p)
-
-def parseFile[T](path: Path)(using p: Parser[T]): List[T] =
-    parse(os.read(path))
+def parse[T](input: String)(using p: Parser[T]): T = p(input)
 
 extension [T](input: String)
-    def parsed(using p: Parser[T]): List[T] = parse(input)
+    def parsed(using p: Parser[T]): T = parse(input)
 
 extension [T](input: Path)
-    def parsed(using p: Parser[T]): List[T] = parseFile(input)
+    def parsed(using p: Parser[T]): T = parse(os.read(input))
 
-given Parser[Int]    = _.toInt
-given Parser[String] = identity
+given Parser[Int]                              = _.toInt
+given Parser[String]                           = identity
+given Parser[Long]                             = _.toLong
+given [T](using p: Parser[T]): Parser[List[T]] = _.split('\n').filter(_.nonEmpty).toList.map(parse).toList
 
 object parsers:
     def separatedBy(separator: String): Parser[List[String]] = input =>
@@ -47,6 +46,7 @@ def display[T1: Show, T2: Show](title: String, part1: T1, part2: T2): Unit =
     println()
     println("Part 2:")
     println(part2.show)
+end display
 
 // Base case: Empty tuple
 given Show[EmptyTuple] = _ => "()"
@@ -63,5 +63,12 @@ given [T: Show]: Show[Iterable[T]] = _.map(show).mkString("[", ", ", "]")
 given Show[String] with
     def show(input: String): String = s""""$input""""
 
-given Show[Int] = _.toString
+given Show[Int]  = _.toString
 given Show[Long] = _.toString
+given Show[Char] = _.toString
+given [T : Show]: Show[Board[T]] with
+    def show(board: Board[T]): String =
+        board.values
+            .map: row =>
+                row.map(_.show).mkString
+            .mkString("\n")

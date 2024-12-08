@@ -27,22 +27,21 @@ object Day02 extends AoCDay:
                 Report(levels.patch(index, Nil, 1))
     end Report
 
-    type Input  = Report
+    type Input  = List[Report]
     type Output = Int
-    given parser: Parser[Input] = input =>
+    given parser: Parser[Report] = input =>
         Report(input.split(" ").toList.map(_.toInt))
 
-    @main
-    def main(): Unit =
-        val input = (os.pwd / "files" / "day02.txt").parsed
+    def main(args: Array[String]): Unit =
+        val input: Input = (os.pwd / "files" / "day02.txt").parsed
         display("Day 02", part1(input), part2(input))
     end main
 
-    def part1(input: List[Input]): Output =
+    def part1(input: Input): Output =
         input.count(_.isSafe)
     end part1
 
-    def part2(input: List[Input]): Output =
+    def part2(input: Input): Output =
         input.count: report =>
             report.isSafe || report.subreports.exists(_.isSafe)
     end part2
